@@ -127,7 +127,7 @@ public:
 		::Sint64 diff = static_cast<::Sint32>(tick_)
 			+ static_cast<::Sint32>(delta_)
 			- static_cast<::Sint32>(timer_.last());
-		return diff < 0? 0: diff;
+		return static_cast<::Uint32>(diff < 0 ? 0 : diff);
 	}
 	
 private:
@@ -250,6 +250,7 @@ protected:
 	bool first_config_;
 
 	::Uint32 frame_delay_;
+	::Uint32 frame_count_;
 	::Uint32 frames_per_second_;
 	::Uint32 rendered_frames_;
 	::Uint32 event_tick_lim_;

@@ -97,12 +97,13 @@ application::application(
 	loop_(true),
 	first_config_(true),
 	frame_delay_(0),
+	frame_count_(0),
 	frames_per_second_(0),
 	rendered_frames_(0),
 	event_tick_lim_(64),
 	opt_vm_(opt_vm),
 	misc_interval_(timer_, 250),
-	status_interval_(timer_, 2000)
+	status_interval_(timer_, 1000)
 {
 	if (::SDL_Init(sdl_flags) < 0)
 		PUP_ERR(std::runtime_error, ::SDL_GetError());
@@ -204,8 +205,10 @@ void application::configure()
 		first_config_ = false;
 
 		::glShadeModel(GL_SMOOTH);
+#ifdef PUP_NIX
 		::glEnable(GL_LINE_SMOOTH);
 		::glEnable(GL_POLYGON_SMOOTH);
+#endif
 		::glClearDepth(1.0f);
 
 		::glEnable(GL_DEPTH_TEST);
@@ -333,20 +336,25 @@ void application::after_render()
 {
 	::SDL_GL_SwapWindow(window_);
 	
+	frame_count_++;
 	frames_per_second_ = static_cast<::Uint32>(
 		++rendered_frames_ / timer_.total_sec()
 	);
 	
-	if (status_interval_.expired()) {
+	if (status_interval_.test_expired()) {
 		::SDL_SetWindowTitle(
 			window_,
-			boost::str(boost::format("%1% [avgfps=%2%, frames=%3%, ctrlr=%4%]")
+			boost::str(boost::format("%1% [approx_fps=%2%, avg_fps=%3%, frames=%4%, ctrlr=%5%]")
 				% application_name()
+				% frame_count_
 				% frames_per_second_
 				% rendered_frames_
 				% controller_queue_.front()->get_name()
 			).c_str()
 		);
+
+		frame_count_ = 0;
+		status_interval_.renew();
 	}
 
 	if (frame_delay_)
