@@ -74,8 +74,10 @@
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "SDL2.lib")
 #pragma comment(lib, "SDL2main.lib")
+#pragma comment(lib, "SDL2_mixer.lib")
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
+#pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "freetype.lib")
 #define _CRT_SECURE_NO_WARNINGS
 #endif
@@ -117,12 +119,12 @@
 #ifdef PUP_WIN
 #include <GL/glew.h>
 #include <GL/GLU.h>
-#include <catch/catch.hpp>
 #else
 #include <GL/glew.h>
 #include <GL/glu.h>
-#include <catch.hpp>
 #endif
+
+#include <catch.hpp>
 
 #include <SDL.h>
 #include <SDL_mixer.h>
