@@ -927,7 +927,7 @@ void input::render()
 		label_pos_.x(),
 		label_pos_.y(),
 		label_,
-		this->get_owner().get_theme().get("label")
+		this->get_owner().get_theme().get("value")
 	);
 
 	std::string value_fix(value_ + append_);
@@ -1125,7 +1125,7 @@ void checkbox::render()
 		label_pos_.x() + padding_,
 		label_pos_.y() + padding_,
 		box,
-		this->get_owner().get_theme().get("value")
+		this->get_owner().get_theme().get("label")
 	);
 }
 
