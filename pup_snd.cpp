@@ -192,7 +192,6 @@ void jukebox::update(music& mus)
 			io::path_list::iterator it;
 			do {
 				it = pup::random_element(files_.begin(), files_.end());
-				//for (auto jit : files_) std::cout << jit << std::endl;
 			} while (std::find(history_.begin(), history_.end(), *it) != history_.end());
 			mus.start(*it);
 			history_.push_back(*it);
@@ -214,8 +213,11 @@ void jukebox::update(music& mus)
 {
 	for (auto it = files_.begin(); it != files_.end(); /* in-loop */) {
 		if (
-			boost::filesystem::is_regular_file(*it) &&
-			it->extension().string() == ".wav"
+			boost::filesystem::is_regular_file(*it) && (
+				it->extension().string() == ".mp3" ||
+				it->extension().string() == ".ogg" ||
+				it->extension().string() == ".wav"
+			)
 		) {
 			++it;
 		} else {
