@@ -192,7 +192,10 @@ void jukebox::update(music& mus)
 			io::path_list::iterator it;
 			do {
 				it = pup::random_element(files_.begin(), files_.end());
-			} while (std::find(history_.begin(), history_.end(), *it) != history_.end());
+			} while (
+				files_.size() > history_.size() + 1 &&
+				std::find(history_.begin(), history_.end(), *it) != history_.end()
+			);
 			mus.start(*it);
 			history_.push_back(*it);
 			if (static_cast<int>(history_.size()) == history_lim_) {
