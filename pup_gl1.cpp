@@ -352,13 +352,19 @@ void face::load_char(::FT_Face f, unsigned char ch)
 		return log2;
 	};
 
-	std::size_t width = next_ilog2(bitmap.width);
-	std::size_t height = next_ilog2(bitmap.rows);
+#ifdef PUP_WIN
+typedef int load_char_size_type;
+#else
+typedef std::size_t load_char_size_type;
+#endif
+
+	load_char_size_type width = next_ilog2(bitmap.width);
+	load_char_size_type height = next_ilog2(bitmap.rows);
 
 	::GLubyte* expanded_data = new ::GLubyte[2 * width * height];
 
-	for (std::size_t j = 0; j < height; ++j) {
-		for (std::size_t i = 0; i < width; ++i) {
+	for (load_char_size_type j = 0; j < height; ++j) {
+		for (load_char_size_type i = 0; i < width; ++i) {
 			expanded_data[2 * (i + j * width)]
 				= expanded_data[2 * (i + j * width) + 1]
 				= (i >= bitmap.width || j >= bitmap.rows)?
@@ -762,7 +768,7 @@ void text::render()
 		label_pos_.y() + padding_,
 		this->get_width() - padding_,
 		this->get_height() - padding_,
-		ft::ALIGN_CENTER
+		align_
 	);
 }
 
@@ -777,7 +783,7 @@ void text::finalize()
 
 int text::get_height()
 {
-	return face_->get_sizei() + 2 * padding_;
+	return static_cast<int>(face_->text_height(label_)) + 2 * padding_;
 }
 
 input::input(form& owner, const std::string& name) :
