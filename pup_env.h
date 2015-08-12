@@ -52,6 +52,8 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/asio.hpp>
 #include <boost/core/noncopyable.hpp>
+#include <boost/crc.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/foreach.hpp>
