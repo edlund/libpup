@@ -214,9 +214,9 @@ public:
 
 	virtual void stop() throw() { loop_ = false; }
 
-	snd::music& get_music() throw() { return music_; }
-	snd::jukebox& get_jukebox() throw() { return jukebox_; }
-	snd::soundboard& get_soundboard() throw() { return soundboard_; }
+	snd::music& get_music() throw() { return *music_; }
+	snd::jukebox& get_jukebox() throw() { return *jukebox_; }
+	snd::soundboard& get_soundboard() throw() { return *soundboard_; }
 
 	timer& get_timer() throw() { return timer_; }
 	interval& get_misc_interval() throw() { return misc_interval_; }
@@ -263,9 +263,9 @@ protected:
 	boost::property_tree::ptree pt_;
 	boost::program_options::variables_map opt_vm_;
 	
-	snd::music music_;
-	snd::jukebox jukebox_;
-	snd::soundboard soundboard_;
+	snd::music* music_;
+	snd::jukebox* jukebox_;
+	snd::soundboard* soundboard_;
 
 	timer timer_;
 	interval misc_interval_;

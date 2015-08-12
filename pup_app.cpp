@@ -102,6 +102,9 @@ application::application(
 	rendered_frames_(0),
 	event_tick_lim_(64),
 	opt_vm_(opt_vm),
+	music_(nullptr),
+	jukebox_(nullptr),
+	soundboard_(nullptr),
 	misc_interval_(timer_, 250),
 	status_interval_(timer_, 1000)
 {
@@ -145,6 +148,13 @@ application::application(
 	::glGenVertexArrays(1, &vertex_array_id_);
 	::glBindVertexArray(vertex_array_id_);
 
+	music_ = new snd::music();
+	jukebox_ = new snd::jukebox();
+	soundboard_ = new snd::soundboard();
+	if (!(music_ && jukebox_ && soundboard_)) {
+		PUP_ERR(std::runtime_error, "out of memory");
+	}
+
 	::SDL_version linked;
 	::SDL_GetVersion(&linked);
 	
@@ -160,6 +170,10 @@ application::application(
 
 application::~application() throw()
 {
+	delete music_;
+	delete jukebox_;
+	delete soundboard_;
+
 	::glDeleteVertexArrays(1, &vertex_array_id_);
 	::SDL_DestroyWindow(window_);
 	::Mix_Quit();
@@ -194,7 +208,7 @@ void application::configure()
 	::SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 4);
 
-	music_.set_volume(pt_.get<int>("sound.music_volume"));
+	music_->set_volume(pt_.get<int>("sound.music_volume"));
 
 	if (::SDL_GL_SetSwapInterval(vsync == 1) < 0) {
 		BOOST_LOG_TRIVIAL(warning) << boost::format("failed to set v-sync: %1%")
@@ -325,7 +339,7 @@ void application::loop()
 
 void application::misc()
 {
-	jukebox_.update(music_);
+	jukebox_->update(*music_);
 }
 
 void application::before_render()
