@@ -1,4 +1,14 @@
 
+# This project has been abandoned
+
+Its replacement can be found by following the links below:
+
+Origin: https://bitbucket.org/erikedlund/libmeck/
+
+Mirror: https://github.com/edlund/libmeck
+
+The original README text follows.
+
 # libPowerUP - Create games with SDL2 and OpenGL
 
 Origin: https://bitbucket.org/erikedlund/libpup
